@@ -1,5 +1,4 @@
 import operator
-import numpy as np
 import math
 from tkinter import *
 from time import sleep
