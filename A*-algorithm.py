@@ -24,6 +24,7 @@ gridSmall = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
              [0, 0, 3, 3, 0, 0, 0, 0, 0, 0],
              [0, 0, 0, 3, 3, 3, 3, 3, 0, 0],
              [0, 0, 0, 0, 0, 0, 0, 3, 0, 0],
+             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
 
@@ -116,7 +117,7 @@ def createNodes(grid):
     entries = [[None for col in range(columns)] for row in range(rows)]
     for row in range(rows):
         for col in range(columns):
-            e = Text(root, bg="White", width=2, height=1)
+            e = Text(root, bg="White", width=18, height=10)
             e.grid(row=row, column=col)
 
             entries[row][col] = e
@@ -130,9 +131,9 @@ def createNodes(grid):
             elif grid[row][col] == 3:
                 e.config(bg="Black")
 
-    geoX = 25 * columns
-    geoY = 25 * rows
-    root.geometry("{0}x{1}".format(geoX , geoY))
+    geoX = 50 * columns
+    geoY = 50 * rows
+    root.state('zoomed')
     return entries
 
 
@@ -162,6 +163,7 @@ def solve(openList, grid):
         else:
             # Find neighbours
             children = currentNode.findNeighbours(grid)
+
             for child in children:
                 child.parent = currentNode
                 closedBreak = False
@@ -173,7 +175,7 @@ def solve(openList, grid):
                 
                 if not closedBreak:
                     # Calculate costs and add the child to the openList
-                    child.G = math.sqrt(pow(child.x - child.parent.x, 2) + pow(child.y - child.parent.y, 2))
+                    child.G = math.sqrt(pow(child.x - child.parent.x, 2) + pow(child.y - child.parent.y, 2)) + child.parent.G
                     child.H = math.sqrt(pow(child.x - endNode[0], 2) + pow(child.y - endNode[1], 2))
                     child.F = child.G + child.H
 
@@ -182,8 +184,9 @@ def solve(openList, grid):
                             if child.G > open.G:
                                 openBreak = True
                                 break
-
-                                
+                            else:
+                                openList.remove(open)
+      
                     if not openBreak:
                         openList.append(child)
         
@@ -200,15 +203,18 @@ def solve(openList, grid):
     return path
 
 # SETUP
-startNode = setStart(50, 25, gridLarge)
-endNode = setEnd(1, 0, gridLarge)
-nodes = createNodes(gridLarge)
+startNode = setStart(6, 3, gridSmall) # Change your maze and set starting coördinates
+endNode = setEnd(4, 1, gridSmall) # Change your maze and set ending coördinates
+nodes = createNodes(gridSmall) # Change your maze
 
 # SOLVE
 rootNode = Node(startNode[0], startNode[1], startNode)
 openList.append(rootNode)
-root.update()
 
-path = solve(openList, gridLarge)
+root.update()
+sleep(1)
+
+
+path = solve(openList, gridSmall) # Change your maze
 
 root.mainloop()
