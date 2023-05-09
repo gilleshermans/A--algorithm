@@ -2,6 +2,33 @@ import heapq
 heap = []
 
 testList = [10, 14, 17, 20, 30, 21, 44]
+testList2 = [20, 17, 30, 2, 5, 19, 8]
+
+def heapify(list : list):
+    newList = list
+    sortedList = sorted(list, reverse=True)
+
+    for node in sortedList:
+        isCorrectlyPlaced = False
+        while not isCorrectlyPlaced:
+            nodeIndex = newList.index(node)
+            try:
+                childL = newList[int(2*nodeIndex+1)]
+                childLIndex = int(2*nodeIndex+1)
+                childR = newList[int(2*nodeIndex+2)]
+                childRIndex = int(2*nodeIndex+2)
+
+                if node > childL:
+                    newList[nodeIndex] = childL
+                    newList[childLIndex] = node
+                elif node > childR:
+                    newList[nodeIndex] = childR
+                    newList[childRIndex] = node
+                else:
+                    isCorrectlyPlaced = True
+            except:
+                isCorrectlyPlaced = True
+   
 
 def insert(heap : list, node):
     hasBubbled = False
@@ -43,6 +70,4 @@ def delete(heap : list):
     return heap
     
 
-testList = delete(testList)
-
-print(testList)
+heapify(testList2)
