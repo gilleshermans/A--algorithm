@@ -137,9 +137,16 @@ def createNodes(grid):
     root.state('zoomed')
     return entries
 
+def setup_maze(SX, SY, EX, EY, maze):
+    startNode = setStart(SX, SY, maze)
+    endNode = setEnd(EX, EY, maze)
+    nodes = createNodes(maze)
+    return startNode, endNode, nodes
 
-# Run the algorithm
-def solve(openList, grid):
+def solve(grid, startNode, endNode):
+    rootNode = Node(startNode[0], startNode[1], startNode)
+    openList.list.append(rootNode)
+
     path = []
     while openList.list != []:
         startTime = time()
@@ -204,15 +211,10 @@ def solve(openList, grid):
     
     return path
 
-# SETUP
-startNode = setStart(50, 25, gridLarge) # Change your maze and set starting coördinates
-endNode = setEnd(3, 0, gridLarge) # Change your maze and set ending coördinates
-nodes = createNodes(gridLarge) # Change your maze
 
-# SOLVE
-rootNode = Node(startNode[0], startNode[1], startNode)
-openList.list.append(rootNode)
+if __name__ == '__main__':
+    startNode, endNode, nodes = setup_maze(50, 25, 3, 0, gridLarge)
 
-path = solve(openList, gridLarge) # Change your maze
+    path = solve(gridLarge, startNode, endNode) # Change your maze
 
-root.mainloop()
+    root.mainloop()
