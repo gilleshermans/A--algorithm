@@ -2,6 +2,7 @@ import operator
 import math
 from tkinter import *
 from time import sleep
+from time import time
 
 # Tkinter setup
 root = Tk()
@@ -117,7 +118,7 @@ def createNodes(grid):
     entries = [[None for col in range(columns)] for row in range(rows)]
     for row in range(rows):
         for col in range(columns):
-            e = Text(root, bg="White", width=18, height=10)
+            e = Text(root, bg="White", width=2, height=1)
             e.grid(row=row, column=col)
 
             entries[row][col] = e
@@ -141,6 +142,7 @@ def createNodes(grid):
 def solve(openList, grid):
     path = []
     while openList != []:
+        startTime = time()
         # Sort list based on lowest F-cost and H-cost
         openList.sort(key=operator.attrgetter("F", "H"))
         currentNode = openList[0]
@@ -152,6 +154,8 @@ def solve(openList, grid):
         # If the goald has been reached
         # Backtrack to find the path
         if currentNode.pos == endNode:
+            endTime = time()
+            print(endTime - startTime)
             openList = []
             current = currentNode
             while current.pos != startNode:
@@ -190,12 +194,12 @@ def solve(openList, grid):
                     if not openBreak:
                         openList.append(child)
         
-            # Update Graphics
-            for a in openList:
-                nodes[a.y][a.x].config(bg="Green")
-            for b in closedList:
-                nodes[b.y][b.x].config(bg="Red")
-            root.update()
+    # Update Graphics
+    for a in openList:
+        nodes[a.y][a.x].config(bg="Green")
+    for b in closedList:
+        nodes[b.y][b.x].config(bg="Red")
+    root.update()
 
     for c in path:
         nodes[c.y][c.x].config(bg="#0c6fa6")
@@ -203,18 +207,14 @@ def solve(openList, grid):
     return path
 
 # SETUP
-startNode = setStart(6, 3, gridSmall) # Change your maze and set starting coördinates
-endNode = setEnd(4, 1, gridSmall) # Change your maze and set ending coördinates
-nodes = createNodes(gridSmall) # Change your maze
+startNode = setStart(50, 25, gridLarge) # Change your maze and set starting coördinates
+endNode = setEnd(3, 0, gridLarge) # Change your maze and set ending coördinates
+nodes = createNodes(gridLarge) # Change your maze
 
 # SOLVE
 rootNode = Node(startNode[0], startNode[1], startNode)
 openList.append(rootNode)
 
-root.update()
-sleep(1)
-
-
-path = solve(openList, gridSmall) # Change your maze
+path = solve(openList, gridLarge) # Change your maze
 
 root.mainloop()

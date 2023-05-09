@@ -53,25 +53,26 @@ class heap:
         if self.list != []:
             indexNode = self.list.index(self.list[0])
             while not hasBubbledDown:
-                node = self.list[indexNode]
-                childL = self.list[int(2*indexNode) + 1]
-                childR = self.list[int(2*indexNode) + 2]
+                try:
+                    node = self.list[indexNode]
+                    childL = self.list[int(2*indexNode) + 1]
+                    childR = self.list[int(2*indexNode) + 2]
 
-                if self.list[indexNode].F > childL.F:
-                    self.list[indexNode] = childL
-                    self.list[self.list.index(childL)] = node
-                    indexNode = self.list.index(childL)
-                elif self.list[indexNode].F > childR.F:
-                    self.list[indexNode] = childR
-                    self.list[self.list.index(childR)] = node
-                    indexNode = self.list.index(childL)
-                else:
+                    if self.list[indexNode].F > childL.F:
+                        self.list[indexNode] = childL
+                        self.list[self.list.index(childL)] = node
+                        indexNode = self.list.index(childL)
+                    elif self.list[indexNode].F > childR.F:
+                        self.list[indexNode] = childR
+                        self.list[self.list.index(childR)] = node
+                        indexNode = self.list.index(childL)
+                    else:
+                        hasBubbledDown = True
+                except:
                     hasBubbledDown = True
-
                 # indexNode = self.list.index(node)
 
         return self.list
 
 # testList = heap([10, 14, 17, 20, 30, 21, 44])
 # testList.delete()
-# print(testList)
