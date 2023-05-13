@@ -141,8 +141,9 @@ def createNodes(grid):
 # Run the algorithm
 def solve(openList, grid):
     path = []
+    startTime = time()
     while openList != []:
-        startTime = time()
+        
         # Sort list based on lowest F-cost and H-cost
         openList.sort(key=operator.attrgetter("F", "H"))
         currentNode = openList[0]
@@ -155,7 +156,7 @@ def solve(openList, grid):
         # Backtrack to find the path
         if currentNode.pos == endNode:
             endTime = time()
-            print(endTime - startTime)
+            print("Solve Time:" , (endTime - startTime)*1000 , "ms")
             openList = []
             current = currentNode
             while current.pos != startNode:
@@ -214,7 +215,6 @@ nodes = createNodes(gridLarge) # Change your maze
 # SOLVE
 rootNode = Node(startNode[0], startNode[1], startNode)
 openList.append(rootNode)
-
 path = solve(openList, gridLarge) # Change your maze
 
 root.mainloop()

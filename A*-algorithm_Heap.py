@@ -146,10 +146,10 @@ def setup_maze(SX, SY, EX, EY, maze):
 def solve(grid, startNode, endNode):
     rootNode = Node(startNode[0], startNode[1], startNode)
     openList.list.append(rootNode)
-
+    
     path = []
+    startTime = time()
     while openList.list != []:
-        startTime = time()
         # Sort list based on lowest F-cost and H-cost
         currentNode = openList.list[0]
 
@@ -161,7 +161,7 @@ def solve(grid, startNode, endNode):
         # Backtrack to find the path
         if currentNode.pos == endNode:
             endTime = time()
-            print(endTime - startTime)
+            print("Solve Time:" , (endTime - startTime)*1000 , "ms")
             openList.list = []
             current = currentNode
             while current.pos != startNode:
@@ -193,7 +193,8 @@ def solve(grid, startNode, endNode):
                         if child.pos == open.pos:
                             if child.G > open.G:
                                 openBreak = True
-                                break
+                            else:
+                                openList.list.remove(open)
       
                     if not openBreak:
                         openList.insert(child)
@@ -208,7 +209,7 @@ def solve(grid, startNode, endNode):
 
     for c in path:
         nodes[c.y][c.x].config(bg="#0c6fa6")
-    
+            
     return path
 
 

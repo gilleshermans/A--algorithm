@@ -7,84 +7,55 @@ class heap:
 
 
     def insert(self, node):
-        hasBubbled = False
+        isCorrectlyPlaced = False
         self.list.append(node)
 
-        while not hasBubbled:
+        while not isCorrectlyPlaced:
             indexNode = self.list.index(node)
-            parent = self.list[int((indexNode - 1)/2)]
-            indexParent = self.list.index(parent)
+            indexParent = int((indexNode - 1)/2)
+            parent = self.list[indexParent]
+            
             if parent.F > node.F:
-                self.list[indexNode] = parent
-                self.list[indexParent] = node
+                self.list[indexNode], self.list[indexParent] = parent, node
             else:
-                hasBubbled = True
+                isCorrectlyPlaced = True
         
         return self.list
+
 
 
     def delete(self):
         isCorrectlyPlaced = False
         self.list[0] = self.list[-1]
         self.list.pop(len(self.list)-1)
+
+        if self.list == []:
+            return
         
-        if self.list != []:
-            indexNode = self.list.index(self.list[0])
-            while not isCorrectlyPlaced:
-                node = self.list[indexNode]
-                childLIndex = int(2*indexNode) + 1 
-                childRIndex = int(2*indexNode) + 2
-                if childLIndex < len(self.list) and childRIndex < len(self.list):
+        indexNode = self.list.index(self.list[0])
+
+        while not isCorrectlyPlaced:
+            node = self.list[indexNode]
+            childLIndex = 2*indexNode + 1 
+            childRIndex = childLIndex + 1
+
+            if childLIndex < len(self.list):
+                try:
                     if self.list[childRIndex].F < self.list[childLIndex].F:
-                        childLIndex += 1
-                        childRIndex -= 1
+                        childLIndex, childRIndex = childRIndex, childLIndex
+                except:
+                    pass
 
-                if childLIndex < len(self.list):
-                    childL = self.list[childLIndex]
-                    if self.list[indexNode].F > childL.F:
-                        self.list[indexNode] = childL
-                        self.list[childLIndex] = node
-                        indexNode = self.list.index(node)
-                        continue
-                    
+                childL = self.list[childLIndex]
+                if self.list[indexNode].F > childL.F:
+                    self.list[indexNode], self.list[childLIndex] = childL, node
+                    indexNode = childLIndex
+                    continue
 
-                if childRIndex < len(self.list):
-                    childR = self.list[childRIndex]
-                    if self.list[indexNode].F > childR.F:
-                        self.list[indexNode] = childR
-                        self.list[childRIndex] = node
-                        indexNode = self.list.index(node)
-                        continue
-                    
-                isCorrectlyPlaced = True   
+            isCorrectlyPlaced = True   
+
         return self.list
 
-    # def delete(self):
-    #     if not self.list:
-    #         return []
-        
-    #     self.list[0], self.list[-1] = self.list[-1], self.list[0]
-    #     node = self.list.pop()
-    #     indexNode = 0
-    #     childLIndex = 1
-    #     childRIndex = 2
-        
-    #     while childLIndex < len(self.list):
-    #         childL = self.list[childLIndex]
-    #         if childRIndex < len(self.list):
-    #             childR = self.list[childRIndex]
-    #             if childR.F < childL.F:
-    #                 childL, childR = childR, childL
-            
-    #         if childL.F >= node.F:
-    #             break
-            
-    #         self.list[indexNode], self.list[childLIndex] = childL, node
-    #         indexNode = childLIndex
-    #         childLIndex = 2 * indexNode + 1
-    #         childRIndex = childLIndex + 1
-        
-    #     return self.list
 
 
     def heapify(self):
